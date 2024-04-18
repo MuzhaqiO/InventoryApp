@@ -19,11 +19,20 @@ public class ProductService {
     public ProductEntityResponseDTO getProductById (Long id){
         return productMapper.toDTO(productRepository.getReferenceById(id));
     }
-    public ProductEntityResponseDTO createProduct (ProductCreateDTO productCreateDTO){
-        Product createdProduct = productRepository.save(productMapper.toCreateEntity(productCreateDTO));
-        return productMapper.toDTO(createdProduct);
+    public ProductEntityResponseDTO getProductByName (String name){
+        return productMapper.toDTO(productRepository.getProductByName(name));
+    }
+    public List<ProductEntityResponseDTO> getProductsByCategoryId (Long id){
+        return productMapper.toDTOs(productRepository.getProductByCategoriesId(id));
+    }
+    public List<ProductEntityResponseDTO> getProductsByCategoryName (String name){
+        return productMapper.toDTOs(productRepository.getProductByCategoriesName(name));
     }
     public List<ProductEntityResponseDTO> getAllProducts (){
         return productMapper.toDTOs(productRepository.findAll());
+    }
+    public ProductEntityResponseDTO createProduct (ProductCreateDTO productCreateDTO){
+        Product createdProduct = productRepository.save(productMapper.toCreateEntity(productCreateDTO));
+        return productMapper.toDTO(createdProduct);
     }
 }
