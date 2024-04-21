@@ -8,5 +8,6 @@ import java.util.List;
 public class ProductEntityResponseDTO {
     private Long id;
     private String name;
+    private Double price;
     private List<ProductCategoryDTO> categories;
 }

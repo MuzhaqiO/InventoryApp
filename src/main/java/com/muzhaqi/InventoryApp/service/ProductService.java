@@ -3,6 +3,7 @@ package com.muzhaqi.InventoryApp.service;
 import com.muzhaqi.InventoryApp.dto.productDTO.ProductCreateDTO;
 import com.muzhaqi.InventoryApp.dto.productDTO.ProductEntityResponseDTO;
 import com.muzhaqi.InventoryApp.entity.Product;
+import com.muzhaqi.InventoryApp.entity.Warehouse;
 import com.muzhaqi.InventoryApp.mapper.ProductMapper;
 import com.muzhaqi.InventoryApp.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,15 @@ public class ProductService {
         return productMapper.toDTOs(productRepository.findAll());
     }
     public ProductEntityResponseDTO createProduct (ProductCreateDTO productCreateDTO){
-        Product createdProduct = productRepository.save(productMapper.toCreateEntity(productCreateDTO));
-        return productMapper.toDTO(createdProduct);
+        Product product = productMapper.toCreateEntity(productCreateDTO);
+
+        Warehouse warehouse =new Warehouse();
+        warehouse.setProduct(product);
+        warehouse.setQuantity(0L);
+
+        product.setWarehouse(warehouse);
+        productRepository.save(product);
+
+        return productMapper.toDTO(product);
     }
 }

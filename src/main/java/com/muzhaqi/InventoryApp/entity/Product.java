@@ -9,7 +9,6 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "products")
@@ -22,8 +21,12 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
+
     @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "price", nullable = false)
+    private Double price;
 
     @JsonIgnore
     @ManyToMany
@@ -33,4 +36,13 @@ public class Product {
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     private List<Category> categories = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "products")
+    private List<Bill> bills = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product")
+    private List<Transaction> transactions;
+
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
+    private Warehouse warehouse;
 }
