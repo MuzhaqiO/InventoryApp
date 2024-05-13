@@ -1,5 +1,7 @@
 package com.muzhaqi.InventoryApp.controller;
 
+import com.muzhaqi.InventoryApp.dto.categoryDTO.CategoryCreateDTO;
+import com.muzhaqi.InventoryApp.dto.categoryDTO.CategoryEntityResponseDTO;
 import com.muzhaqi.InventoryApp.dto.productDTO.ProductCreateDTO;
 import com.muzhaqi.InventoryApp.dto.productDTO.ProductEntityResponseDTO;
 import com.muzhaqi.InventoryApp.service.ProductService;
@@ -38,5 +40,13 @@ public class ProductController {
     @PostMapping("createProduct")
     public ResponseEntity<ProductEntityResponseDTO> createProduct(@RequestBody ProductCreateDTO productCreateDTO){
         return ResponseEntity.ok(productService.createProduct(productCreateDTO));
+    }
+    @PostMapping("update/{id}")
+    public ProductEntityResponseDTO updateProduct(@PathVariable Long id, @RequestBody ProductCreateDTO productCreateDTO){
+        return productService.updateProduct(id, productCreateDTO);
+    }
+    @DeleteMapping("delete/{id}")
+    public void deleteCategory(@PathVariable Long id){
+        productService.deleteProduct(id);
     }
 }

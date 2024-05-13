@@ -31,4 +31,12 @@ public class CategoryController {
     public ResponseEntity<CategoryEntityResponseDTO> createCategory(@RequestBody CategoryCreateDTO categoryCreateDTO){
         return ResponseEntity.ok(categoryService.createCategory(categoryCreateDTO));
     }
+    @PostMapping("update/{id}")
+    public CategoryEntityResponseDTO updateCategory(@PathVariable Long id, @RequestBody CategoryCreateDTO categoryCreateDTO){
+        return categoryService.updateCategory(id, categoryCreateDTO);
+    }
+    @DeleteMapping("delete/{id}")
+    public void deleteCategory(@PathVariable Long id){
+        categoryService.deleteCategory(id);
+    }
 }

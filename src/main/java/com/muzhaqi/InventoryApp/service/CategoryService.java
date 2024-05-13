@@ -29,4 +29,13 @@ public class CategoryService {
         Category createdCategory = categoryRepository.save(categoryMapper.toCreateEntity(categoryCreateDTO));
         return categoryMapper.toDTO(createdCategory);
     }
+    public void deleteCategory(Long id){
+        categoryRepository.deleteById(id);
+    }
+    public CategoryEntityResponseDTO updateCategory (Long id, CategoryCreateDTO categoryCreateDTO){
+        Category category = categoryRepository.getReferenceById(id);
+        category.setName(categoryCreateDTO.getName());
+        Category savedCategory = categoryRepository.save(category);
+        return categoryMapper.toDTO(savedCategory);
+    }
 }

@@ -16,6 +16,9 @@ public class Warehouse {
     @Id
     private Long productId;
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "quantity")
     private Long quantity;
 

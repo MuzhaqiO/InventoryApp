@@ -5,10 +5,7 @@ import com.muzhaqi.InventoryApp.dto.warehouseDTO.WarehouseEntityResponseDTO;
 import com.muzhaqi.InventoryApp.service.WarehouseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,5 +22,9 @@ public class WarehouseController {
     @GetMapping("getAll")
     public ResponseEntity<List<WarehouseEntityResponseDTO>> getAllWarehouses(){
         return ResponseEntity.ok(warehouseService.getAllWarehouses());
+    }
+    @PostMapping("updateWarehouse/{id}")
+    public ResponseEntity<WarehouseEntityResponseDTO> updateQuantity(@PathVariable Long id, @RequestParam Long quantity){
+        return ResponseEntity.ok(warehouseService.updateQuantity(id, quantity));
     }
 }

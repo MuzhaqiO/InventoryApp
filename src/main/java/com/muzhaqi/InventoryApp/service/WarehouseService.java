@@ -27,6 +27,12 @@ public class WarehouseService {
         return warehouseMapper.toDTOs(warehouseRepository.findAll());
     }
 
+    public WarehouseEntityResponseDTO updateQuantity (Long id, Long quantity){
+        Warehouse warehouse = warehouseRepository.getReferenceById(id);
+        warehouse.setQuantity(quantity);
+        return warehouseMapper.toDTO(warehouseRepository.save(warehouse));
+    }
+
 //    public Double getWorth(){
 //        return warehouseRepository.getWorth();
 //    }
