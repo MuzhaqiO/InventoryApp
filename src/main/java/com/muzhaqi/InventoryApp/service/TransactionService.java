@@ -2,10 +2,13 @@ package com.muzhaqi.InventoryApp.service;
 
 import com.muzhaqi.InventoryApp.dto.transactionDTO.TransactionCreateDTO;
 import com.muzhaqi.InventoryApp.dto.transactionDTO.TransactionEntityResponseDTO;
+import com.muzhaqi.InventoryApp.entity.Bill;
 import com.muzhaqi.InventoryApp.entity.Product;
 import com.muzhaqi.InventoryApp.entity.Transaction;
 import com.muzhaqi.InventoryApp.entity.Warehouse;
+import com.muzhaqi.InventoryApp.enums.Type;
 import com.muzhaqi.InventoryApp.mapper.TransactionMapper;
+import com.muzhaqi.InventoryApp.repository.BillRepository;
 import com.muzhaqi.InventoryApp.repository.ProductRepository;
 import com.muzhaqi.InventoryApp.repository.TransactionRepository;
 import com.muzhaqi.InventoryApp.repository.WarehouseRepository;
@@ -21,19 +24,33 @@ public class TransactionService {
     private final TransactionMapper transactionMapper;
     private final ProductRepository productRepository;
     private final WarehouseRepository warehouseRepository;
+    private final BillRepository billRepository;
+    private final WarehouseService warehouseService;
 
     public TransactionEntityResponseDTO getTransactionById (Long id){
         return transactionMapper.toDTO(transactionRepository.getReferenceById(id));
     }
 
-    public TransactionEntityResponseDTO createTransaction (TransactionCreateDTO transactionCreateDTO){
-        Transaction transaction = transactionMapper.toCreateEntity(transactionCreateDTO);
-        Product product = productRepository.getReferenceById(transactionCreateDTO.getProductId());
-        transaction.setFinalValue(transactionCreateDTO.getQuantity()*product.getPrice());
-        transactionRepository.save(transaction);
-        return transactionMapper.toDTO(transaction);
-    }
+//    public TransactionEntityResponseDTO createTransaction (TransactionCreateDTO transactionCreateDTO){
+//        Transaction transaction = transactionMapper.toCreateEntity(transactionCreateDTO);
+//        Product product = productRepository.getReferenceById(transactionCreateDTO.getProductId());
+//        transaction.setFinalValue(transactionCreateDTO.getQuantity()*product.getPrice());
+//        transactionRepository.save(transaction);
+//        return transactionMapper.toDTO(transaction);
+//    }
     public List<TransactionCreateDTO> getTransactionByIds(List<Long> transactionIds){
         return transactionMapper.toCreateDTOs(transactionRepository.findByIdIn(transactionIds));
+    }
+
+    public TransactionEntityResponseDTO createTransaction (Long billId, TransactionCreateDTO transactionCreateDTO){
+        Transaction transaction = transactionMapper.toCreateEntity(transactionCreateDTO);
+        Product product = productRepository.getReferenceById(transactionCreateDTO.getProductId());
+        Bill bill = billRepository.getReferenceById(billId);
+        transaction.setBill(bill);
+        transaction.setFinalValue(transactionCreateDTO.getQuantity()*product.getPrice());
+        Type billType = Type.valueOf(bill.getType().toString());
+        warehouseService.updateProductQuantity(transactionCreateDTO, billType);
+        transactionRepository.save(transaction);
+     return transactionMapper.toDTO(transaction);
     }
 }

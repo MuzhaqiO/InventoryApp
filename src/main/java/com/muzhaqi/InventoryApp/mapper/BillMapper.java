@@ -8,7 +8,7 @@ import org.mapstruct.Mapper;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = TransactionMapper.class)
 public interface BillMapper {
     BillCreateDTO toCreateDTO (Bill bill);
     List<BillCreateDTO> toCreateDTOs (List<Bill> bills);

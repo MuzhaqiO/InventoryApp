@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "inventoryApp/bill")
 @RequiredArgsConstructor
-public class BillController {
+public class  BillController {
     private final BillService billService;
 
     @GetMapping("billId/{id}")

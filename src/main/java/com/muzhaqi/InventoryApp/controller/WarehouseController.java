@@ -24,7 +24,7 @@ public class WarehouseController {
         return ResponseEntity.ok(warehouseService.getAllWarehouses());
     }
     @PostMapping("updateWarehouse/{id}")
-    public ResponseEntity<WarehouseEntityResponseDTO> updateQuantity(@PathVariable Long id, @RequestParam Long quantity){
+    public ResponseEntity<WarehouseEntityResponseDTO> updateQuantity(@PathVariable Long id, @RequestBody Long quantity){
         return ResponseEntity.ok(warehouseService.updateQuantity(id, quantity));
     }
 }

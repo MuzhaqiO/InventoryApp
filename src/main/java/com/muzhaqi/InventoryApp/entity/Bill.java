@@ -1,5 +1,6 @@
 package com.muzhaqi.InventoryApp.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.muzhaqi.InventoryApp.enums.Type;
 import jakarta.persistence.*;
@@ -25,6 +26,7 @@ public class Bill {
     private Long id;
 
     @Column(name = "date", nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", timezone = "CET")
     private Date date;
 
     @Column(name = "total_value", nullable = false)

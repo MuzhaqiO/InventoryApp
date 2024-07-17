@@ -17,8 +17,12 @@ public class TransactionController {
     public ResponseEntity<TransactionEntityResponseDTO> getTransactionById(@PathVariable Long id){
         return ResponseEntity.ok(transactionService.getTransactionById(id));
     }
-    @PostMapping("createTransaction")
-    public ResponseEntity<TransactionEntityResponseDTO> createTransaction(@RequestBody TransactionCreateDTO transactionCreateDTO){
-        return ResponseEntity.ok(transactionService.createTransaction(transactionCreateDTO));
+//    @PostMapping("createTransaction")
+//    public ResponseEntity<TransactionEntityResponseDTO> createTransaction(@RequestBody TransactionCreateDTO transactionCreateDTO){
+//        return ResponseEntity.ok(transactionService.createTransaction(transactionCreateDTO));
+//    }
+    @PostMapping("createTransaction/{billId}")
+    public ResponseEntity<TransactionEntityResponseDTO> createTransaction(@PathVariable Long billId, @RequestBody TransactionCreateDTO transactionCreateDTO){
+        return ResponseEntity.ok(transactionService.createTransaction(billId, transactionCreateDTO));
     }
 }

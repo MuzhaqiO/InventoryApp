@@ -7,5 +7,4 @@ import java.util.List;
 @Data
 public class BillCreateDTO {
     private String type;
-    private List<BillTransactionDTO> transactions;
 }

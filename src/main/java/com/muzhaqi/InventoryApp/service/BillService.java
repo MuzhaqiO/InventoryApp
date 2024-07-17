@@ -35,27 +35,35 @@ public class BillService {
         return billMapper.toDTOs(billRepository.findAll());
     }
 
+//    public BillEntityResponseDTO createBill (BillCreateDTO billCreateDTO){
+//        Bill bill = billMapper.toCreateEntity(billCreateDTO);
+//        bill.setDate(Date.valueOf(LocalDate.now()));
+//        bill.setType(Type.valueOf(billCreateDTO.getType()));
+//        bill.setTotalValue(billCreateDTO.getTransactions().stream().mapToDouble(billTransactionDTO -> {
+//            long transactionId = billTransactionDTO.getId();
+//            Transaction transaction = transactionMapper.toEntity(transactionService.getTransactionById(transactionId));
+//            return transaction.getFinalValue();
+//        }).sum());
+//        List<Long> transactionsIds = billCreateDTO.getTransactions().stream().map(BillTransactionDTO::getId).toList();
+//        List<TransactionCreateDTO> transactions = transactionService.getTransactionByIds(transactionsIds);
+//
+//        Type billType = Type.valueOf(billCreateDTO.getType());
+//        updateWarehouseQuantities(transactions, billType);
+//        billRepository.save(bill);
+//        return billMapper.toDTO(bill);
+//    }
+//
+//    private void updateWarehouseQuantities(List<TransactionCreateDTO> transactionCreateDTOs, Type billType){
+//        for (TransactionCreateDTO transactionCreateDTO : transactionCreateDTOs){
+//            warehouseService.updateProductQuantity(transactionCreateDTO, billType);
+//        }
+//    }
+
     public BillEntityResponseDTO createBill (BillCreateDTO billCreateDTO){
         Bill bill = billMapper.toCreateEntity(billCreateDTO);
         bill.setDate(Date.valueOf(LocalDate.now()));
         bill.setType(Type.valueOf(billCreateDTO.getType()));
-        bill.setTotalValue(billCreateDTO.getTransactions().stream().mapToDouble(billTransactionDTO -> {
-            long transactionId = billTransactionDTO.getId();
-            Transaction transaction = transactionMapper.toEntity(transactionService.getTransactionById(transactionId));
-            return transaction.getFinalValue();
-        }).sum());
-        List<Long> transactionsIds = billCreateDTO.getTransactions().stream().map(BillTransactionDTO::getId).toList();
-        List<TransactionCreateDTO> transactions = transactionService.getTransactionByIds(transactionsIds);
-
-        Type billType = Type.valueOf(billCreateDTO.getType());
-        updateWarehouseQuantities(transactions, billType);
-        billRepository.save(bill);
-        return billMapper.toDTO(bill);
-    }
-
-    private void updateWarehouseQuantities(List<TransactionCreateDTO> transactionCreateDTOs, Type billType){
-        for (TransactionCreateDTO transactionCreateDTO : transactionCreateDTOs){
-            warehouseService.updateProductQuantity(transactionCreateDTO, billType);
-        }
+        bill.setTotalValue(0.0);
+        return billMapper.toDTO(billRepository.save(bill));
     }
 }
