@@ -28,15 +28,6 @@ public class Product {
     @Column(name = "price", nullable = false)
     private Double price;
 
-    @JsonIgnore
-    @ManyToMany
-    @JoinTable(
-            name = "products_categories",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
-    private List<Category> categories = new ArrayList<>();
-
     @ManyToMany(mappedBy = "products")
     private List<Bill> bills = new ArrayList<>();
 

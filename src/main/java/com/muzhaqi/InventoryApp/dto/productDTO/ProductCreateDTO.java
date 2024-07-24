@@ -8,5 +8,4 @@ import java.util.List;
 public class ProductCreateDTO {
     private String name;
     private Double price;
-    private List<ProductCategoryDTO> categories;
 }

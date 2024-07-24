@@ -19,6 +19,14 @@ public class  BillController {
     public ResponseEntity<BillEntityResponseDTO> getBillById(@PathVariable Long id){
         return ResponseEntity.ok(billService.getBillById(id));
     }
+    @GetMapping("getBillsByCategoryId/{id}")
+    public ResponseEntity<List<BillEntityResponseDTO>> getBillsByCategoryId(@PathVariable Long id){
+        return ResponseEntity.ok(billService.getBillsByCategoryId(id));
+    }
+    @GetMapping("getBillsByCategoryName/{name}")
+    public ResponseEntity<List<BillEntityResponseDTO>> getBillsByCategoryName(@PathVariable String name){
+        return ResponseEntity.ok(billService.getBillsByCategoryName(name));
+    }
     @GetMapping("getAll")
     public ResponseEntity<List<BillEntityResponseDTO>> getAllBills(){
         return ResponseEntity.ok(billService.getBills());

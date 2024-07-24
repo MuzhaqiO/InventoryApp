@@ -35,6 +35,10 @@ public class Bill {
     @Enumerated(EnumType.STRING)
     private Type type;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    private Category category;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(
