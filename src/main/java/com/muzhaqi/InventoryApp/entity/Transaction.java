@@ -25,6 +25,9 @@ public class Transaction {
     @Column(name = "quantity", nullable = false)
     private Long quantity;
 
+    @Column(name = "finalPrice", nullable = false)
+    private Double finalPrice;
+
     @Column(name = "finalValue", nullable = false)
     private Double finalValue;
 

@@ -33,10 +33,6 @@ public class WarehouseService {
         return warehouseMapper.toDTO(warehouseRepository.save(warehouse));
     }
 
-//    public Double getWorth(){
-//        return warehouseRepository.getWorth();
-//    }
-
     public void updateProductQuantity (TransactionCreateDTO transactionCreateDTO, Type billType){
         Warehouse warehouse = warehouseRepository.getReferenceById(transactionCreateDTO.getProductId());
         long quantityChange = transactionCreateDTO.getQuantity() * (billType == Type.SELL ? -1:1);

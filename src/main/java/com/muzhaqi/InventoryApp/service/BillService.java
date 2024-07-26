@@ -27,9 +27,6 @@ public class BillService {
     private final BillMapper billMapper;
     private final CategoryService categoryService;
     private final CategoryMapper categoryMapper;
-    private final TransactionService transactionService;
-    private final TransactionMapper transactionMapper;
-    private final WarehouseService warehouseService;
 
     public BillEntityResponseDTO getBillById (Long id){
         return billMapper.toDTO(billRepository.getReferenceById(id));
@@ -45,37 +42,17 @@ public class BillService {
         return billMapper.toDTOs(billRepository.getBillByCategoryName(name));
     }
 
-//    public BillEntityResponseDTO createBill (BillCreateDTO billCreateDTO){
-//        Bill bill = billMapper.toCreateEntity(billCreateDTO);
-//        bill.setDate(Date.valueOf(LocalDate.now()));
-//        bill.setType(Type.valueOf(billCreateDTO.getType()));
-//        bill.setTotalValue(billCreateDTO.getTransactions().stream().mapToDouble(billTransactionDTO -> {
-//            long transactionId = billTransactionDTO.getId();
-//            Transaction transaction = transactionMapper.toEntity(transactionService.getTransactionById(transactionId));
-//            return transaction.getFinalValue();
-//        }).sum());
-//        List<Long> transactionsIds = billCreateDTO.getTransactions().stream().map(BillTransactionDTO::getId).toList();
-//        List<TransactionCreateDTO> transactions = transactionService.getTransactionByIds(transactionsIds);
-//
-//        Type billType = Type.valueOf(billCreateDTO.getType());
-//        updateWarehouseQuantities(transactions, billType);
-//        billRepository.save(bill);
-//        return billMapper.toDTO(bill);
-//    }
-//
-//    private void updateWarehouseQuantities(List<TransactionCreateDTO> transactionCreateDTOs, Type billType){
-//        for (TransactionCreateDTO transactionCreateDTO : transactionCreateDTOs){
-//            warehouseService.updateProductQuantity(transactionCreateDTO, billType);
-//        }
-//    }
-
-    public BillEntityResponseDTO createBill (BillCreateDTO billCreateDTO){
+    public BillEntityResponseDTO createBill(BillCreateDTO billCreateDTO, LocalDate date) {
         Bill bill = billMapper.toCreateEntity(billCreateDTO);
         Category category = categoryMapper.toEntity(categoryService.getCategoryById(billCreateDTO.getCategoryId()));
-        bill.setDate(Date.valueOf(LocalDate.now()));
+
+        bill.setDate(Date.valueOf(date != null ? date : LocalDate.now()));
+
         bill.setType(Type.valueOf(billCreateDTO.getType()));
         bill.setCategory(category);
         bill.setTotalValue(0.0);
+
         return billMapper.toDTO(billRepository.save(bill));
     }
+
 }

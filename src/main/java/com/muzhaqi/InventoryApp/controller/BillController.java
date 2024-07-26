@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -32,7 +33,7 @@ public class  BillController {
         return ResponseEntity.ok(billService.getBills());
     }
     @PostMapping("createBill")
-    public ResponseEntity<BillEntityResponseDTO> createBill(@RequestBody BillCreateDTO billCreateDTO){
-        return ResponseEntity.ok(billService.createBill(billCreateDTO));
+    public ResponseEntity<BillEntityResponseDTO> createBill(@RequestBody BillCreateDTO billCreateDTO, @RequestParam(required = false) LocalDate date){
+        return ResponseEntity.ok(billService.createBill(billCreateDTO, date));
     }
 }

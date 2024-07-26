@@ -23,7 +23,6 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final TransactionMapper transactionMapper;
     private final ProductRepository productRepository;
-    private final WarehouseRepository warehouseRepository;
     private final BillRepository billRepository;
     private final WarehouseService warehouseService;
 
@@ -31,26 +30,32 @@ public class TransactionService {
         return transactionMapper.toDTO(transactionRepository.getReferenceById(id));
     }
 
-//    public TransactionEntityResponseDTO createTransaction (TransactionCreateDTO transactionCreateDTO){
-//        Transaction transaction = transactionMapper.toCreateEntity(transactionCreateDTO);
-//        Product product = productRepository.getReferenceById(transactionCreateDTO.getProductId());
-//        transaction.setFinalValue(transactionCreateDTO.getQuantity()*product.getPrice());
-//        transactionRepository.save(transaction);
-//        return transactionMapper.toDTO(transaction);
-//    }
     public List<TransactionCreateDTO> getTransactionByIds(List<Long> transactionIds){
         return transactionMapper.toCreateDTOs(transactionRepository.findByIdIn(transactionIds));
     }
 
     public TransactionEntityResponseDTO createTransaction (Long billId, TransactionCreateDTO transactionCreateDTO){
-        Transaction transaction = transactionMapper.toCreateEntity(transactionCreateDTO);
         Product product = productRepository.getReferenceById(transactionCreateDTO.getProductId());
+        if (transactionCreateDTO.getFinalPrice() == null) {
+            transactionCreateDTO.setFinalPrice(product.getPrice());
+        }
+        Transaction transaction = transactionMapper.toCreateEntity(transactionCreateDTO);
         Bill bill = billRepository.getReferenceById(billId);
         transaction.setBill(bill);
-        transaction.setFinalValue(transactionCreateDTO.getQuantity()*product.getPrice());
+        Double finalPrice = transactionCreateDTO.getFinalPrice();
+        transaction.setFinalValue(transactionCreateDTO.getQuantity()*finalPrice);
         Type billType = Type.valueOf(bill.getType().toString());
         warehouseService.updateProductQuantity(transactionCreateDTO, billType);
+        Double newTotalValue = bill.getTransactions().stream()
+                .mapToDouble(Transaction::getFinalValue)
+                .sum() + transaction.getFinalValue();
+        bill.setTotalValue(newTotalValue);
         transactionRepository.save(transaction);
-     return transactionMapper.toDTO(transaction);
+        billRepository.save(bill);
+        TransactionEntityResponseDTO responseDTO = transactionMapper.toDTO(transaction);
+        responseDTO.setProductName(product.getName());
+        responseDTO.setPrice(product.getPrice());
+
+        return responseDTO;
     }
 }

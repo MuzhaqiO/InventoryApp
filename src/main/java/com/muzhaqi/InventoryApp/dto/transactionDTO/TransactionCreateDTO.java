@@ -6,4 +6,5 @@ import lombok.Data;
 public class TransactionCreateDTO {
     private Long productId;
     private Long quantity;
+    private Double finalPrice;
 }

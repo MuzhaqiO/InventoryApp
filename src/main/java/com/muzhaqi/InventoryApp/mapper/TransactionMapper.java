@@ -17,10 +17,12 @@ public interface TransactionMapper {
     Transaction toCreateEntity (TransactionCreateDTO transactionCreateDTO);
     List<Transaction> toCreateEntities (List<TransactionCreateDTO> transactionCreateDTOs);
 
-    @Mapping(source = "product.id", target = "productId")
+    @Mapping(source = "product.name", target = "productName")
+    @Mapping(source = "product.price", target = "price")
     TransactionEntityResponseDTO toDTO (Transaction transaction);
     List<TransactionEntityResponseDTO> toDTOs (List<Transaction> transactions);
-    @Mapping(source = "productId", target = "product.id")
+    @Mapping(source = "productName", target = "product.name")
+    @Mapping(source = "price", target = "product.price")
     Transaction toEntity (TransactionEntityResponseDTO transactionEntityResponseDTO);
     List<Transaction> toEntities (List<TransactionEntityResponseDTO> transactionEntityResponseDTOs);
 }
